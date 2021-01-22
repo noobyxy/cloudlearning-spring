@@ -10,6 +10,10 @@ public class ResultUtil {
         return result.setCode(code).setData(data);
     }
 
+    public static Result<Integer> success() {
+        return success(0);
+    }
+
     public static <T> Result<T> success(T data) {
         Result result = new Result();
         result.setCode(ResultEnum.SUCCESS).setData(data);

@@ -1,45 +1,44 @@
 package com.yxy.cl.entity;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
 
 import javax.persistence.*;
-import java.text.Format;
+import java.io.Serializable;
 
-@Getter
-@Setter
-@NoArgsConstructor
 @Entity
-@Table(name = "User")
-public class User {
+@Table(name = "user")
+@Data
+public class User implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="user_id")
+    @Column(name = "user_id", nullable = false)
     private Integer userId;
-
-    @Column(name = "user_name", nullable = false,length = 20)
-    private String username;
-
-    @Column(name = "password", nullable = false)
-    private String password;
-
-    @Column(name = "age")
-    private Integer age;
-
-    @Column(name = "gender")
-    private String gender;
-
-    @Column(name = "phone")
-    private String phone;
-
-    @Column(name = "email")
-    private String email;
 
     @Column(name = "address")
     private String address;
 
+    @Column(name = "age")
+    private Integer age;
+
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "gender")
+    private String gender;
+
     @Column(name = "money")
     private Double money;
+
+    @Column(name = "password", nullable = false)
+    private String password;
+
+    @Column(name = "phone")
+    private String phone;
+
+    @Column(name = "user_name", nullable = false)
+    private String userName;
 
 }

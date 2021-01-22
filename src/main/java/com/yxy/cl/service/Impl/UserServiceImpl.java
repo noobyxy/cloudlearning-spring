@@ -5,7 +5,7 @@ import com.yxy.cl.entity.User;
 import com.yxy.cl.entity.dto.form.ModifyPassWordForm;
 import com.yxy.cl.entity.dto.form.UserLoginForm;
 import com.yxy.cl.entity.dto.form.UserRegisterForm;
-import com.yxy.cl.mapper.UserMapper;
+import com.yxy.cl.dao.UserRepository;
 import com.yxy.cl.service.IUserService;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +25,11 @@ import static com.yxy.cl.consts.CookieConsts.COOKIE_USERNAME;
 @Transactional
 public class UserServiceImpl implements IUserService {
     @Autowired
-    private UserMapper mMapper;
+    private UserRepository userDao;
 
     @Override
     public User loginAuthentication(UserLoginForm loginForm) {
-        List<User> userList = mMapper.findUserByNameAndPassword(loginForm.getUsername(),DigestUtils.md2Hex(loginForm.getPassword()));
+        List<User> userList = userDao.findUserByNameAndPassword(loginForm.getUsername(),DigestUtils.md2Hex(loginForm.getPassword()));
         System.out.println(DigestUtils.md2Hex(loginForm.getPassword()));
         if (userList != null && userList.size() == 1) {
             return userList.get(0);
@@ -39,7 +39,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public boolean registerUsernameCheckExist(UserRegisterForm registerForm) {
-        List<User> userList = mMapper.findUserByName(registerForm.getUsername());
+        List<User> userList = userDao.findUserByName(registerForm.getUsername());
         return (userList != null && userList.size() == 1);
 //        return false;
     }
@@ -48,12 +48,12 @@ public class UserServiceImpl implements IUserService {
     public void insertUser(User user) {
         String pwdStr = user.getPassword();
         user.setPassword(DigestUtils.md2Hex(pwdStr));
-        mMapper.save(user);
+        userDao.save(user);
     }
 
     @Override
     public void changeUser(User user) {
-        mMapper.save(user);
+        userDao.save(user);
     }
 
     @Override
@@ -81,7 +81,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public User findUserByName(String username) {
-        List<User> userList = mMapper.findUserByName(username);
+        List<User> userList = userDao.findUserByName(username);
         if (userList != null && userList.size() == 1) {
             return userList.get(0);
         }
@@ -95,7 +95,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public void modifyUserInfo(HttpServletRequest request, User user) {
-        mMapper.save(user);
+        userDao.save(user);
     }
 
     @Override
@@ -114,7 +114,6 @@ public class UserServiceImpl implements IUserService {
                 }
             }
             if (username.length() > 0 && password.length() > 0) {
-                System.out.println("in here");;
                 UserLoginForm loginForm = new UserLoginForm();
                 loginForm.setPassword(password);
                 loginForm.setUsername(username);
@@ -126,12 +125,12 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public Optional<User> findUserById(Integer id) {
-        return mMapper.findById(id);
+    public Optional<User> findUserById(Long id) {
+        return userDao.findById(id);
     }
 
     @Override
-    public String findNameById(Integer id) {
-        return mMapper.findNameById(id);
+    public String findNameById(Long id) {
+        return userDao.findNameById(id);
     }
 }

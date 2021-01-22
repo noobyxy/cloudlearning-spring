@@ -48,7 +48,7 @@ public interface IUserService {
 
     void checkCookie(HttpServletRequest request);
 
-    Optional<User> findUserById(Integer id);
+    Optional<User> findUserById(Long id);
 
-    String findNameById(Integer id);
+    String findNameById(Long id);
 }
